@@ -3,6 +3,16 @@ import { baseUrl } from '~/services/utils';
 import { ILanguage } from '~/interfaces/language';
 // data
 import dataShopLanguages, { dataShopDefaultLocale } from '~/data/shopLanguages';
+// translations
+import enTranslations from '../../../public/i18n/en.json';
+import arTranslations from '../../../public/i18n/ar.json';
+import ruTranslations from '../../../public/i18n/ru.json';
+
+const translationsMap: Record<string, Record<string, string>> = {
+    en: enTranslations,
+    ar: arTranslations,
+    ru: ruTranslations,
+};
 
 export function getDefaultLocale(): string {
     return dataShopDefaultLocale;
@@ -39,7 +49,7 @@ async function loadTranslation(locale: string): Promise<Record<string, string>> 
         return fetch(baseUrl(`/i18n/${locale}.json`)).then((response) => response.json());
     }
 
-    return (await import(`../../../public/i18n/${locale}.json`)).default;
+    return translationsMap[locale] || {};
 }
 
 export async function loadMessages(locale: string): Promise<Record<string, string>> {
