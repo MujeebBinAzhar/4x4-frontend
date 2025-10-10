@@ -2,6 +2,9 @@
   "name": "red-parts.react",
   "version": "1.2.0",
   "private": true,
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "NODE_OPTIONS=\"--openssl-legacy-provider\" next dev",
     "build": "next build",
