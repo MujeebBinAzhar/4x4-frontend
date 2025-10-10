@@ -1,0 +1,215 @@
+@import '~photoswipe/dist/photoswipe';
+@import '~photoswipe/dist/default-skin/default-skin';
+@import '~slick-carousel/slick/slick';
+@import '~react-toastify/dist/ReactToastify.min';
+@import '~react-input-range/lib/css/index';
+
+@import 'bootstrap';
+@import 'style';
+@import 'components/stock-badge';
+
+.guest-post {
+    max-width: 600px;
+    margin: 0 auto;
+
+    .carousel-item {
+        img {
+            object-fit: cover;
+            height: 400px;
+        }
+    }
+
+    .btn-like {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &.liked {
+            animation: like-animation 0.5s ease-in-out;
+        }
+    }
+}
+
+.guest-post-form {
+    max-width: 600px;
+    margin: 0 auto;
+
+    .image-previews {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .preview-container {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 4px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+@keyframes like-animation {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+$primary-color: #262626;
+$secondary-color: #8e8e8e;
+$border-color: #dbdbdb;
+$background-color: #fafafa;
+
+.instagram-feed {
+    background-color: $background-color;
+    min-height: 100vh;
+    padding: 20px 0;
+
+    .post {
+        background-color: #fff;
+        border: 1px solid $border-color;
+        border-radius: 3px;
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
+
+            .user-info {
+                display: flex;
+                flex-direction: column;
+
+                .username {
+                    font-weight: 600;
+                    color: $primary-color;
+                }
+
+                .title {
+                    font-size: 12px;
+                    color: $secondary-color;
+                }
+            }
+        }
+
+        .post-images {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; // 1:1 Aspect ratio
+            overflow: hidden;
+
+            .image-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                transition: transform 0.3s ease;
+            }
+
+            .image {
+                flex-shrink: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .nav-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: rgba(255, 255, 255, 0.7);
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+
+                &.left {
+                    left: 10px;
+                }
+
+                &.right {
+                    right: 10px;
+                }
+            }
+
+            &:hover .nav-button {
+                opacity: 1;
+            }
+        }
+
+        .post-content {
+            padding: 14px 16px;
+
+            .actions {
+                display: flex;
+                align-items: center;
+                display: flex;
+                align-items: flex-start;
+
+                .like-button {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    padding: 0;
+                    margin-right: 10px;
+                }
+            }
+
+            .likes-count {
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .description {
+                margin-bottom: 8px;
+            }
+
+            .post-info {
+                font-size: 12px;
+                color: $secondary-color;
+            }
+        }
+    }
+}

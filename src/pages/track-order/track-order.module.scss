@@ -1,0 +1,304 @@
+// Variables
+$primary-color: #3b82f6;
+$secondary-color: #6b7280;
+$success-color: #10b981;
+$error-color: #ef4444;
+$background-color: #f9fafb;
+$card-background: #ffffff;
+$border-color: #e5e7eb;
+$text-primary: #111827;
+$text-secondary: #4b5563;
+$border-radius: 0.5rem;
+$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$transition: all 0.3s ease;
+
+// Mixins
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin responsive($breakpoint) {
+    @if $breakpoint == mobile {
+        @media (max-width: 640px) {
+            @content;
+        }
+    } @else if $breakpoint == tablet {
+        @media (max-width: 768px) {
+            @content;
+        }
+    } @else if $breakpoint == laptop {
+        @media (max-width: 1024px) {
+            @content;
+        }
+    }
+}
+
+// Container styles
+.container {
+    @include flex(column, flex-start, center);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+
+    @include responsive(mobile) {
+        padding: 1rem;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h1 {
+        font-size: 2.5rem;
+        color: $text-primary;
+        margin-bottom: 0.5rem;
+
+        @include responsive(mobile) {
+            font-size: 1.8rem;
+        }
+    }
+
+    p {
+        font-size: 1.1rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+
+        @include responsive(mobile) {
+            font-size: 1rem;
+        }
+    }
+}
+
+// Form styles
+.formContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.formCard {
+    background-color: $card-background;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    margin-bottom: 2rem;
+}
+
+.form {
+    @include flex(column);
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.inputGroup {
+    @include flex(column);
+    gap: 0.5rem;
+}
+
+.label {
+    font-weight: 500;
+    color: $text-primary;
+    font-size: 0.9rem;
+}
+
+.input {
+    transition: $transition;
+
+    &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+}
+
+.button {
+    @include flex(row, center, center);
+    gap: 0.5rem;
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+    transition: $transition;
+    margin-top: 0.5rem;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+}
+
+.buttonIcon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.error {
+    color: $error-color;
+    background-color: rgba($error-color, 0.1);
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+// Results styles
+.resultContainer {
+    background-color: $card-background;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    padding: 2rem;
+
+    @include responsive(mobile) {
+        padding: 1rem;
+    }
+}
+
+.resultTitle {
+    font-size: 1.5rem;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+// Timeline styles
+.timeline {
+    @include flex(column);
+    gap: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 1.5rem;
+        width: 2px;
+        background-color: $border-color;
+
+        @include responsive(mobile) {
+            left: 1rem;
+        }
+    }
+}
+
+.timelineItem {
+    @include flex(row, flex-start, flex-start);
+    gap: 1.5rem;
+    position: relative;
+
+    @include responsive(mobile) {
+        gap: 1rem;
+    }
+
+    &.completed {
+        .timelineIcon {
+            background-color: $success-color;
+            color: white;
+        }
+    }
+}
+
+.timelineIcon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: $secondary-color;
+    color: white;
+    @include flex(row, center, center);
+    z-index: 1;
+
+    @include responsive(mobile) {
+        width: 2rem;
+        height: 2rem;
+
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+}
+
+.timelineContent {
+    flex: 1;
+
+    h3 {
+        font-size: 1.2rem;
+        color: $text-primary;
+        margin-bottom: 0.25rem;
+
+        @include responsive(mobile) {
+            font-size: 1rem;
+        }
+    }
+
+    p {
+        color: $text-secondary;
+        margin-bottom: 0.25rem;
+
+        @include responsive(mobile) {
+            font-size: 0.9rem;
+        }
+    }
+}
+
+.timelineDate {
+    font-size: 0.9rem;
+    color: $secondary-color;
+
+    @include responsive(mobile) {
+        font-size: 0.8rem;
+    }
+}
+
+// Order details styles
+.orderDetails {
+    border-top: 1px solid $border-color;
+    padding-top: 1.5rem;
+
+    h3 {
+        font-size: 1.2rem;
+        color: $text-primary;
+        margin-bottom: 1rem;
+    }
+}
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @include responsive(mobile) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.detailItem {
+    @include flex(column);
+    gap: 0.25rem;
+}
+
+.detailLabel {
+    font-weight: 500;
+    color: $text-secondary;
+    font-size: 0.9rem;
+}
+
+.detailValue {
+    color: $text-primary;
+}
+
+// Export variables for use in JavaScript
+:export {
+    primaryColor: $primary-color;
+    secondaryColor: $secondary-color;
+    successColor: $success-color;
+    errorColor: $error-color;
+}
+
