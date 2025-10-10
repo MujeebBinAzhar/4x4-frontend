@@ -3,13 +3,13 @@
   "version": "1.2.0",
   "private": true,
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "NODE_OPTIONS=\"--openssl-legacy-provider\" next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS=\"--openssl-legacy-provider\" next build",
     "start": "next start",
-    "build-and-start": "next build && next start"
+    "build-and-start": "NODE_OPTIONS=\"--openssl-legacy-provider\" next build && next start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.4",
