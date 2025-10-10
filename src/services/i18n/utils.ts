@@ -4,9 +4,9 @@ import { ILanguage } from '~/interfaces/language';
 // data
 import dataShopLanguages, { dataShopDefaultLocale } from '~/data/shopLanguages';
 // translations
-import enTranslations from '../../../public/i18n/en.json';
-import arTranslations from '../../../public/i18n/ar.json';
-import ruTranslations from '../../../public/i18n/ru.json';
+import enTranslations from '~/i18n/en.json';
+import arTranslations from '~/i18n/ar.json';
+import ruTranslations from '~/i18n/ru.json';
 
 const translationsMap: Record<string, Record<string, string>> = {
     en: enTranslations,
