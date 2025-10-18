@@ -90,6 +90,18 @@ export interface IProduct {
     },
     price: number;
     compareAtPrice: number | null;
+    // New price structure from backend
+    prices?: {
+        originalPrice: number;
+        price: number;
+        tradePrice?: number;
+        discount?: number;
+    };
+    quickDiscount?: {
+        dollarAmount: number;
+        percentageAmount: number;
+        isActive: boolean;
+    };
     images?: string[];
     badges?: string[];
     rating?: number;

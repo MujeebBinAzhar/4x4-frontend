@@ -15,6 +15,7 @@ import ProductGallery from '~/components/shop/ProductGallery';
 import Rating from '~/components/shared/Rating';
 import StockStatusBadge from '~/components/shared/StockStatusBadge';
 import url from '~/services/url';
+import { getProductPrices, getDiscountBadgeText } from '~/services/product-utils';
 import { Compare16Svg, Cross12Svg, Wishlist16Svg } from '~/svg';
 import { useCompareAddItem } from '~/store/compare/compareHooks';
 import { useProductForm } from '~/services/forms/product';
@@ -108,24 +109,42 @@ function Quickview() {
                 </div>
             )}
             <div className="quickview__product-prices-stock">
-                <div className="quickview__product-prices">
-                    {product.compareAtPrice !== null && (
+                {(() => {
+                    const prices = getProductPrices(product);
+                    const discountBadge = getDiscountBadgeText(prices);
+
+                    return (
                         <React.Fragment>
-                            <div className="quickview__product-price quickview__product-price--old">
-                                <CurrencyFormat value={product.compareAtPrice} />
+                            <div className="quickview__product-prices">
+                                {prices.hasDiscount && prices.originalPrice ? (
+                                    <React.Fragment>
+                                        <div className="quickview__product-price quickview__product-price--old">
+                                            <CurrencyFormat value={prices.originalPrice} />
+                                        </div>
+                                        <div className="quickview__product-price quickview__product-price--new">
+                                            <CurrencyFormat value={prices.currentPrice} />
+                                        </div>
+                                        {discountBadge && (
+                                            <span style={{ 
+                                                marginLeft: '0.5rem', 
+                                                fontSize: '0.875rem', 
+                                                color: '#22c55e',
+                                                fontWeight: '600'
+                                            }}>
+                                                {discountBadge}
+                                            </span>
+                                        )}
+                                    </React.Fragment>
+                                ) : (
+                                    <div className="quickview__product-price quickview__product-price--current">
+                                        <CurrencyFormat value={prices.currentPrice} />
+                                    </div>
+                                )}
                             </div>
-                            <div className="quickview__product-price quickview__product-price--new">
-                                <CurrencyFormat value={product.price} />
-                            </div>
+                            <StockStatusBadge className="quickview__product-stock" stock={product.stock.availability as IProductStock} />
                         </React.Fragment>
-                    )}
-                    {product.compareAtPrice === null && (
-                        <div className="quickview__product-price quickview__product-price--current">
-                            <CurrencyFormat value={product.price} />
-                        </div>
-                    )}
-                </div>
-                <StockStatusBadge className="quickview__product-stock" stock={product.stock.availability as IProductStock} />
+                    );
+                })()}
             </div>
 
             <ProductForm

@@ -13,6 +13,7 @@ import CurrencyFormat from "~/components/shared/CurrencyFormat";
 import Rating from "~/components/shared/Rating";
 import url from "~/services/url";
 import { IProduct } from "~/interfaces/product";
+import { getProductPrices, getDiscountBadgeText } from "~/services/product-utils";
 import { useCartAddItem } from "~/store/cart/cartHooks";
 import { useCompareAddItem } from "~/store/compare/compareHooks";
 import { useQuickviewOpen } from "~/store/quickview/quickviewHooks";
@@ -197,21 +198,39 @@ function ProductCard(props: Props) {
 
       <div className="product-card__footer">
         <div className="product-card__prices">
-          {product.compareAtPrice !== null && (
-            <React.Fragment>
-              <div className="product-card__price product-card__price--new">
-                <CurrencyFormat value={product.price} />
-              </div>
-              <div className="product-card__price product-card__price--old">
-                <CurrencyFormat value={product.compareAtPrice} />
-              </div>
-            </React.Fragment>
-          )}
-          {product.compareAtPrice === null && (
-            <div className="product-card__price product-card__price--current">
-              <CurrencyFormat value={product.price} />
-            </div>
-          )}
+          {(() => {
+            const prices = getProductPrices(product);
+            const discountBadge = getDiscountBadgeText(prices);
+
+            return (
+              <React.Fragment>
+                {prices.hasDiscount && prices.originalPrice ? (
+                  <React.Fragment>
+                    <div className="product-card__price product-card__price--new">
+                      <CurrencyFormat value={prices.currentPrice} />
+                    </div>
+                    <div className="product-card__price product-card__price--old">
+                      <CurrencyFormat value={prices.originalPrice} />
+                    </div>
+                    {discountBadge && (
+                      <div className="product-card__price-badge" style={{ 
+                        fontSize: '0.75rem', 
+                        color: '#22c55e', 
+                        fontWeight: 600,
+                        marginLeft: '0.5rem'
+                      }}>
+                        {discountBadge}
+                      </div>
+                    )}
+                  </React.Fragment>
+                ) : (
+                  <div className="product-card__price product-card__price--current">
+                    <CurrencyFormat value={prices.currentPrice} />
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })()}
         </div>
         {!exclude.includes("buttons") && (
           <React.Fragment>

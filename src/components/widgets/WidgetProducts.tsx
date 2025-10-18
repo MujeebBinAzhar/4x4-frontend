@@ -8,6 +8,7 @@ import CurrencyFormat from '~/components/shared/CurrencyFormat';
 import url from '~/services/url';
 import { IProduct } from '~/interfaces/product';
 import AppImage from '~/components/shared/AppImage';
+import { getProductPrices } from '~/services/product-utils';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     widgetTitle: React.ReactNode;
@@ -47,21 +48,28 @@ function WidgetProducts(props: Props) {
                                 </AppLink>
                             </div>
                             <div className="widget-products__prices">
-                                {product.compareAtPrice && (
-                                    <React.Fragment>
-                                        <div className="widget-products__price widget-products__price--new">
-                                            <CurrencyFormat value={product.price} />
-                                        </div>
-                                        <div className="widget-products__price widget-products__price--old">
-                                            <CurrencyFormat value={product.compareAtPrice} />
-                                        </div>
-                                    </React.Fragment>
-                                )}
-                                {!product.compareAtPrice && (
-                                    <div className="widget-products__price widget-products__price--current">
-                                        <CurrencyFormat value={product.price} />
-                                    </div>
-                                )}
+                                {(() => {
+                                    const prices = getProductPrices(product);
+
+                                    return (
+                                        <React.Fragment>
+                                            {prices.hasDiscount && prices.originalPrice ? (
+                                                <React.Fragment>
+                                                    <div className="widget-products__price widget-products__price--new">
+                                                        <CurrencyFormat value={prices.currentPrice} />
+                                                    </div>
+                                                    <div className="widget-products__price widget-products__price--old">
+                                                        <CurrencyFormat value={prices.originalPrice} />
+                                                    </div>
+                                                </React.Fragment>
+                                            ) : (
+                                                <div className="widget-products__price widget-products__price--current">
+                                                    <CurrencyFormat value={prices.currentPrice} />
+                                                </div>
+                                            )}
+                                        </React.Fragment>
+                                    );
+                                })()}
                             </div>
                         </div>
                     </div>

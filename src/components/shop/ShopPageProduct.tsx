@@ -28,6 +28,7 @@ import Rating from "~/components/shared/Rating";
 import StockStatusBadge from "~/components/shared/StockStatusBadge";
 import url from "~/services/url";
 import { getCategoryPath } from "~/services/utils";
+import { getProductPrices, getDiscountBadgeText } from "~/services/product-utils";
 import { IProduct, IProductStock } from "~/interfaces/product";
 import {
   IProductPageLayout,
@@ -174,81 +175,96 @@ function ShopPageProduct(props: Props) {
   );
 
   const productInfoBody = (
-    <div className="product__info-body">
-      {product.compareAtPrice && (
-        <div className="product__badge tag-badge tag-badge--sale">
-          <FormattedMessage id="TEXT_BADGE_SALE" />
-        </div>
-      )}
-
-      <div className="product__prices-stock">
-        <div className="product__prices">
-          {product.compareAtPrice && (
+    <React.Fragment>
+      <div className="product__info-body">
+        {(() => {
+          const prices = getProductPrices(product);
+          const discountBadge = getDiscountBadgeText(prices);
+          
+          return (
             <React.Fragment>
-              <div className="product__price product__price--old">
-                <CurrencyFormat value={product.compareAtPrice} />
-              </div>
-              <div className="product__price product__price--new">
-                <CurrencyFormat value={product.price} />
+              {prices.hasDiscount && (
+                <div className="product__badge tag-badge tag-badge--sale">
+                  <FormattedMessage id="TEXT_BADGE_SALE" />
+                  {discountBadge && (
+                    <span style={{ marginLeft: '0.5rem', fontSize: '0.875rem' }}>
+                      {discountBadge}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div className="product__prices-stock">
+                <div className="product__prices">
+                  {prices.hasDiscount && prices.originalPrice ? (
+                    <React.Fragment>
+                      <div className="product__price product__price--old">
+                        <CurrencyFormat value={prices.originalPrice} />
+                      </div>
+                      <div className="product__price product__price--new">
+                        <CurrencyFormat value={prices.currentPrice} />
+                      </div>
+                    </React.Fragment>
+                  ) : (
+                    <div className="product__price product__price--current">
+                      <CurrencyFormat value={prices.currentPrice} />
+                    </div>
+                  )}
+                </div>
+                <StockStatusBadge
+                  className="product__stock"
+                  stock={product.stock.availability as IProductStock}
+                />
               </div>
             </React.Fragment>
-          )}
-          {!product.compareAtPrice && (
-            <div className="product__price product__price--current">
-              <CurrencyFormat value={product.price} />
-            </div>
-          )}
-        </div>
-        <StockStatusBadge
-          className="product__stock"
-          stock={product.stock.availability as IProductStock}
-        />
-      </div>
+          );
+        })()}
 
-      <div className="product__meta">
-        <table>
-          <tbody>
-            <tr>
-              <th>
-                <FormattedMessage id="TABLE_SKU" />
-              </th>
-              <td>{product.sku}</td>
-            </tr>
-            {product.brand && (
-              <React.Fragment>
-                <tr>
-                  <th>
-                    <FormattedMessage id="TABLE_BRAND" />
-                  </th>
-                  <td>
-                    <AppLink href={url.brand(product.brand)}>
-                      {product.brand.name}
-                    </AppLink>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <FormattedMessage id="TABLE_COUNTRY" />
-                  </th>
-                  <td>
-                    <FormattedMessage
-                      id={`COUNTRY_NAME_${product.brand.country}`}
-                    />
-                  </td>
-                </tr>
-              </React.Fragment>
-            )}
-            <tr>
-              <th>
-                <FormattedMessage id="TABLE_PART_NUMBER" />
-              </th>
-              <td>{product.partNumber}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="product__meta">
+          <table>
+            <tbody>
+              <tr>
+                <th>
+                  <FormattedMessage id="TABLE_SKU" />
+                </th>
+                <td>{product.sku}</td>
+              </tr>
+              {product.brand && (
+                <React.Fragment>
+                  <tr>
+                    <th>
+                      <FormattedMessage id="TABLE_BRAND" />
+                    </th>
+                    <td>
+                      <AppLink href={url.brand(product.brand)}>
+                        {product.brand.name}
+                      </AppLink>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <FormattedMessage id="TABLE_COUNTRY" />
+                    </th>
+                    <td>
+                      <FormattedMessage
+                        id={`COUNTRY_NAME_${product.brand.country}`}
+                      />
+                    </td>
+                  </tr>
+                </React.Fragment>
+              )}
+              <tr>
+                <th>
+                  <FormattedMessage id="TABLE_PART_NUMBER" />
+                </th>
+                <td>{product.partNumber}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <StockWarningMessage product={product} />
       </div>
-      <StockWarningMessage product={product} />
-    </div>
+    </React.Fragment>
   );
 
   const productActions = (
