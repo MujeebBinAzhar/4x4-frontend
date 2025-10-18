@@ -129,7 +129,7 @@ function Quickview() {
                                                 marginLeft: '0.5rem', 
                                                 fontSize: '0.875rem', 
                                                 color: '#22c55e',
-                                                fontWeight: '600'
+                                                fontWeight: 600
                                             }}>
                                                 {discountBadge}
                                             </span>
